@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "7095:80"
+
+  hr_page:
+    build:
+      context: ./Hr_page
+      dockerfile: Dockerfile
+    container_name: hr_page
+    ports:
+      - "7096:80"
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: backend6
+    ports:
+      - "3061:3061"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=admin234
+      - DB_NAME=new_employee_db
+      - DB_PORT=5432
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5094:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin234
+      POSTGRES_DB: new_employee_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
